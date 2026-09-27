@@ -1,0 +1,17 @@
+pluginManagement {
+    repositories {
+        maven { url = 'https://maven.neoforged.net/releases' }
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+// Deliberately NOT using the foojay-resolver-convention plugin here — it's a
+// convenience for auto-downloading a matching JDK if you don't already have
+// one, but it's one more thing that has to reach a plugin repo to resolve.
+// If `java.toolchain.languageVersion = JavaLanguageVersion.of(21)` in
+// build.gradle can't find a local JDK 21 on your machine, either install one
+// (Temurin/Adoptium 21 works fine) or add this plugin back yourself:
+//   plugins { id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0' }
+
+rootProject.name = 'titlescrolls'
