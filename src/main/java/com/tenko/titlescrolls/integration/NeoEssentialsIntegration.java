@@ -5,27 +5,46 @@ import com.tenko.titlescrolls.data.TitleDefinition;
 import com.tenko.titlescrolls.registry.ModAttachments;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+
 /**
- * OPTIONAL bridge to NeoEssentials' Placeholder API. Only ever referenced
- * from one guarded call in TitleScrolls#commonSetup(), which checks
- * ModList.get().isLoaded("neoessentials") first.
+ * Optional bridge to NeoEssentials' placeholder API. Only called when NeoEssentials is
+ * installed (see TitleScrolls#commonSetup). Registers {active_title}: the player's active
+ * title, or "" if none.
  *
- * Registers {active_title}, resolving to the calling player's active title
- * display text (or "" if none picked). Add it to NeoEssentials' own
- * chat-format config, e.g.:
- *   "{prefix}{active_title} <{player}>: {message}"
- *
- * Renamed from {tenko_title} (27 Sep 2026) ahead of publishing this mod
- * publicly — a generic placeholder name makes sense for any server owner
- * installing this, not just Tenko's own. Tenko's own chat.json was updated
- * to match in the same pass.
+ * Done through reflection so Title Scrolls builds without the NeoEssentials jar.
  */
 public class NeoEssentialsIntegration {
 
     public static void register() {
-        com.zerog.neoessentials.api.PlaceholderAPI.registerPlaceholder("active_title",
-                (player, params) -> resolve(player));
-        TitleScrolls.LOGGER.info("[TitleScrolls] Registered {{active_title}} placeholder with NeoEssentials.");
+        try {
+            Class<?> api = Class.forName("com.zerog.neoessentials.api.PlaceholderAPI");
+            for (Method m : api.getMethods()) {
+                if (!m.getName().equals("registerPlaceholder") || m.getParameterCount() != 2
+                        || m.getParameterTypes()[0] != String.class || !m.getParameterTypes()[1].isInterface()) {
+                    continue;
+                }
+                Class<?> handlerType = m.getParameterTypes()[1];
+                Object handler = Proxy.newProxyInstance(handlerType.getClassLoader(), new Class<?>[]{handlerType},
+                        (proxy, method, args) -> {
+                            if (method.getDeclaringClass() == Object.class) {
+                                return switch (method.getName()) {
+                                    case "hashCode" -> System.identityHashCode(proxy);
+                                    case "equals" -> proxy == args[0];
+                                    default -> "TitleScrollsPlaceholder";
+                                };
+                            }
+                            return args != null && args.length > 0 && args[0] instanceof ServerPlayer p ? resolve(p) : "";
+                        });
+                m.invoke(null, "active_title", handler);
+                TitleScrolls.LOGGER.info("[TitleScrolls] Registered {{active_title}} placeholder with NeoEssentials.");
+                return;
+            }
+            TitleScrolls.LOGGER.warn("[TitleScrolls] NeoEssentials found, but its placeholder API was not. {active_title} is not available.");
+        } catch (Throwable t) {
+            TitleScrolls.LOGGER.warn("[TitleScrolls] Could not register {active_title} with NeoEssentials: {}", t.toString());
+        }
     }
 
     private static String resolve(ServerPlayer player) {

@@ -35,8 +35,19 @@ public class TitleReloadListener extends SimpleJsonResourceReloadListener {
         Map<String, TitleDefinition> map = new LinkedHashMap<>();
         loaded.forEach((id, json) -> TitleDefinition.CODEC.parse(JsonOps.INSTANCE, json)
                 .resultOrPartial(error -> TitleScrolls.LOGGER.error("[TitleScrolls] Failed to parse title {}: {}", id, error))
-                .ifPresent(def -> map.put(id.getPath(), def)));
-        this.titles = Map.copyOf(map);
+                .ifPresent(def -> {
+                    // Titles are known by their file name ("cool"). If two datapacks both have a
+                    // "cool", the second one is kept under its full id ("starter:cool") instead of
+                    // silently replacing the first.
+                    String key = id.getPath();
+                    if (map.containsKey(key)) {
+                        key = id.toString();
+                        TitleScrolls.LOGGER.warn("[TitleScrolls] Two datapacks have a title called '{}'. This one is used as '{}'.",
+                                id.getPath(), key);
+                    }
+                    map.put(key, def);
+                }));
+        this.titles = java.util.Collections.unmodifiableMap(map); // keeps load order
         TitleScrolls.LOGGER.info("[TitleScrolls] Loaded {} title definition(s).", map.size());
     }
 

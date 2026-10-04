@@ -25,6 +25,11 @@ public class ModNetworking {
                 (payload, context) -> context.enqueueWork(() -> {
                     if (context.player() instanceof ServerPlayer serverPlayer) {
                         PlayerTitleData data = serverPlayer.getData(ModAttachments.PLAYER_TITLES.get());
+                        // Empty id = take the active title off.
+                        if (payload.titleId().isEmpty()) {
+                            serverPlayer.setData(ModAttachments.PLAYER_TITLES.get(), data.withActive(null));
+                            return;
+                        }
                         // Only allow selecting a title the player actually owns —
                         // never trust the client's claim blindly.
                         if (data.has(payload.titleId())) {

@@ -56,6 +56,8 @@ public class TitleScreen extends Screen {
 
     private static final int SLOT_SIZE = 18;
     private static final int COLS = 9;
+    /** Six rows per page, like a double chest. */
+    private static final int PAGE_SIZE = COLS * 6;
     private static final ItemStack ICON = new ItemStack(Items.NAME_TAG);
 
     private final List<OpenTitleScreenPayload.TitleEntry> catalog;
@@ -65,6 +67,7 @@ public class TitleScreen extends Screen {
     private int gridLeft;
     private int gridTop;
     private int hoveredIndex = -1;
+    private int page = 0;
 
     public TitleScreen(OpenTitleScreenPayload payload) {
         super(Component.literal("Titles"));
@@ -75,13 +78,31 @@ public class TitleScreen extends Screen {
         this.activeTitle = payload.activeTitle();
     }
 
+    private int pages() {
+        return Math.max(1, (int) Math.ceil(catalog.size() / (double) PAGE_SIZE));
+    }
+
+    /** Number of titles on the current page. */
+    private int pageCount() {
+        return Math.min(PAGE_SIZE, catalog.size() - page * PAGE_SIZE);
+    }
+
     @Override
     protected void init() {
-        int rows = Math.max(1, (int) Math.ceil(catalog.size() / (double) COLS));
+        int rows = Math.max(1, (int) Math.ceil(Math.min(PAGE_SIZE, catalog.size()) / (double) COLS));
         int gridWidth = COLS * SLOT_SIZE;
         int gridHeight = rows * SLOT_SIZE;
         this.gridLeft = (this.width - gridWidth) / 2;
         this.gridTop = Math.max(40, (this.height - gridHeight) / 2);
+        if (pages() > 1) {
+            int y = gridTop + gridHeight + 52;
+            addRenderableWidget(net.minecraft.client.gui.components.Button.builder(Component.literal("<"), b -> {
+                if (page > 0) page--;
+            }).bounds(this.width / 2 - 60, y, 20, 20).build());
+            addRenderableWidget(net.minecraft.client.gui.components.Button.builder(Component.literal(">"), b -> {
+                if (page < pages() - 1) page++;
+            }).bounds(this.width / 2 + 40, y, 20, 20).build());
+        }
     }
 
     @Override
@@ -93,7 +114,7 @@ public class TitleScreen extends Screen {
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
 
-        int rows = Math.max(1, (int) Math.ceil(catalog.size() / (double) COLS));
+        int rows = Math.max(1, (int) Math.ceil(Math.min(PAGE_SIZE, catalog.size()) / (double) COLS));
         int gridWidth = COLS * SLOT_SIZE;
         int gridHeight = rows * SLOT_SIZE;
 
@@ -106,9 +127,14 @@ public class TitleScreen extends Screen {
 
         this.hoveredIndex = -1;
 
-        for (int i = 0; i < catalog.size(); i++) {
-            int col = i % COLS;
-            int row = i / COLS;
+        if (pages() > 1) {
+            graphics.drawCenteredString(this.font, "Page " + (page + 1) + "/" + pages(), this.width / 2, gridTop + gridHeight + 58, 0xFFFFFF);
+        }
+
+        for (int slot = 0; slot < pageCount(); slot++) {
+            int i = page * PAGE_SIZE + slot;
+            int col = slot % COLS;
+            int row = slot / COLS;
             int x = gridLeft + col * SLOT_SIZE;
             int y = gridTop + row * SLOT_SIZE;
 
@@ -144,6 +170,9 @@ public class TitleScreen extends Screen {
                 if (!entry.flavorText().isEmpty()) {
                     graphics.drawCenteredString(this.font, entry.flavorText(), this.width / 2, infoY + 11, 0xAAAAAA);
                 }
+                if (entry.id().equals(activeTitle)) {
+                    graphics.drawCenteredString(this.font, "Click again to take this title off.", this.width / 2, infoY + 22, 0x777777);
+                }
             } else {
                 graphics.drawCenteredString(this.font, "???", this.width / 2, infoY, 0xAAAAAA);
             }
@@ -173,7 +202,8 @@ public class TitleScreen extends Screen {
         if (hoveredIndex >= 0) {
             OpenTitleScreenPayload.TitleEntry entry = catalog.get(hoveredIndex);
             if (unlocked.contains(entry.id())) {
-                selectTitle(entry.id());
+                // Clicking the active title takes it off.
+                selectTitle(entry.id().equals(activeTitle) ? "" : entry.id());
                 return true;
             }
             return true;
