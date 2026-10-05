@@ -4,9 +4,9 @@
 
 ## Installation
 
-1. Copy this whole `starter-pack` folder into your world's `datapacks` folder — the result should look like `world/datapacks/starter-pack/pack.mcmeta` and `world/datapacks/starter-pack/data/...`.
-2. If the server is already running, type `/reload` in-game (as an op) or in console. Otherwise just start the server normally.
-3. Check the server log for a line like `Loaded 34 title definition(s)` to confirm it picked them up.
+1. Put `titlescrolls-starter-pack-1.0.0.zip` in your world's `datapacks` folder (`world/datapacks/`). No need to unzip it.
+2. If the server is already running, run `/reload`. Otherwise just start the server.
+3. The server log should show `Loaded 34 title definition(s)`.
 4. Test with `/give @p titlescrolls:title_scroll[titlescrolls:grants_title="rookie"]`, then right-click the scroll to unlock it.
 
 ## Editing
@@ -21,4 +21,4 @@ Every file under `data/starter/titles/` is a plain JSON file:
 }
 ```
 
-Edit, delete, or add new title files freely — `/reload` picks up changes instantly, no recompiling needed. `display` supports `&`-color codes, `rarity` is just a label your own loot tables can key off of, and `flavor_text` is optional.
+Edit, delete, or add new title files freely. Run `/reload` to pick up changes. `display` supports `&`-color codes, `rarity` sets the slot border color in the `/title` menu (common, rare, epic, legendary or unique), and `flavor_text` is optional.
