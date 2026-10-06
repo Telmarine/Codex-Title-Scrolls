@@ -17,12 +17,17 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
  *                 shown once a title is unlocked. Defaults to "common".
  *   flavor_text - a short line shown under the title once unlocked. Optional,
  *                 defaults to blank.
+ *   chat_color  - color of the player's chat messages while this title is worn,
+ *                 e.g. "&b" or "&#FFD700". Optional, defaults to blank (no change).
+ *                 Read by chat mods (Elements: Nexus reads it as chatColor()).
+ *                 Server side only: never sent to the /title menu.
  */
-public record TitleDefinition(String display, String rarity, String flavorText) {
+public record TitleDefinition(String display, String rarity, String flavorText, String chatColor) {
 
     public static final Codec<TitleDefinition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("display").forGetter(TitleDefinition::display),
             Codec.STRING.optionalFieldOf("rarity", "common").forGetter(TitleDefinition::rarity),
-            Codec.STRING.optionalFieldOf("flavor_text", "").forGetter(TitleDefinition::flavorText)
+            Codec.STRING.optionalFieldOf("flavor_text", "").forGetter(TitleDefinition::flavorText),
+            Codec.STRING.optionalFieldOf("chat_color", "").forGetter(TitleDefinition::chatColor)
     ).apply(instance, TitleDefinition::new));
 }

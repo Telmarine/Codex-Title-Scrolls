@@ -24,19 +24,27 @@ Add a file at `data/<namespace>/titles/<id>.json`:
 {
   "display": "&6Kitsune",
   "rarity": "unique",
-  "flavor_text": "Outfoxed the impossible."
+  "flavor_text": "Outfoxed the impossible.",
+  "chat_color": "&6"
 }
 ```
 
 - `display` (required): the title text. `&` color codes work.
 - `rarity` (optional, default `common`): `common`, `rare`, `epic`, `legendary` or `unique`.
 - `flavor_text` (optional): a line shown in the menu once unlocked.
+- `chat_color` (optional): the color of the player's chat messages while they wear the title, e.g. `&b` or `&#FFD700`. Needs a chat mod that reads it (Elements: Nexus does).
 
 A title's id is its file name (`kitsune`). If two datapacks use the same file name, the second one is used as `namespace:id` and a warning is logged.
 
 See `docs/example_title.json.txt` for more.
 
 ## Giving a title
+
+```
+/titlescroll give <player> <title> [amount]
+```
+
+Title ids tab-complete. Needs OP level 2. The long vanilla way still works too:
 
 ```
 /give @p titlescrolls:title_scroll[titlescrolls:grants_title="kitsune"]

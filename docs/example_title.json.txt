@@ -10,7 +10,7 @@ To add a real title to YOUR server:
      <your_title_id> becomes the id you reference from a Title Scroll's
      grants_title data component (see the README's "Giving out a title"
      section for the /give example).
-  3. Fill in the three fields for your own title. Delete every line in this
+  3. Fill in the fields for your own title. Delete every line in this
      file that starts with "//" first — real JSON has no comments, this
      reference copy is just annotated for you.
   4. Run /reload in-game (vanilla's own datapack reload command — nothing
@@ -33,10 +33,15 @@ To add a real title to YOUR server:
   // A short line shown under the title name once it's unlocked. Totally
   // optional flavor text — leave the field out, or set it to "", if you
   // don't want one.
-  "flavor_text": "Outfoxed the impossible."
+  "flavor_text": "Outfoxed the impossible.",
+
+  // The color of the player's chat messages while they wear this title,
+  // e.g. "&b" or "&#FFD700". Only used by chat mods that read it
+  // (Elements: Nexus does). OPTIONAL, leave it out for no change.
+  "chat_color": "&6"
 }
 ----------------------------------------------------------------------------
 
-That's the entire schema — three fields, no nesting, nothing else required.
+That's the entire schema — four fields, no nesting, only "display" is required.
 The mod itself ships with ZERO titles built in; every title on your server,
 including Tenko's own, lives in files exactly like this one.

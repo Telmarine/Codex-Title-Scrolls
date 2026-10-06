@@ -1,6 +1,7 @@
 package com.tenko.titlescrolls;
 
 import com.tenko.titlescrolls.command.TitleCommand;
+import com.tenko.titlescrolls.command.GiveCommand;
 import com.tenko.titlescrolls.data.TitleReloadListener;
 import com.tenko.titlescrolls.integration.NeoEssentialsIntegration;
 import com.tenko.titlescrolls.network.ModNetworking;
@@ -53,5 +54,6 @@ public class TitleScrolls {
 
     private void onRegisterCommands(RegisterCommandsEvent event) {
         TitleCommand.register(event.getDispatcher());
+        GiveCommand.register(event.getDispatcher());
     }
 }
