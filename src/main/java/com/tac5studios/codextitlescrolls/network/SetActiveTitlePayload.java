@@ -1,11 +1,13 @@
-package com.tenko.titlescrolls.network;
+package com.tac5studios.codextitlescrolls.network;
 
-import com.tenko.titlescrolls.TitleScrolls;
+import com.tac5studios.codextitlescrolls.TitleScrolls;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+
+import javax.annotation.Nonnull;
 
 /** Client -> server. Sent when a player clicks a collected title in the GUI. */
 public record SetActiveTitlePayload(String titleId) implements CustomPacketPayload {
@@ -17,6 +19,7 @@ public record SetActiveTitlePayload(String titleId) implements CustomPacketPaylo
             StreamCodec.composite(ByteBufCodecs.STRING_UTF8, SetActiveTitlePayload::titleId, SetActiveTitlePayload::new);
 
     @Override
+    @Nonnull
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

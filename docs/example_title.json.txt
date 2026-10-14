@@ -19,7 +19,7 @@ To add a real title to YOUR server:
 ----------------------------------------------------------------------------
 {
   // Exactly what's shown in the /title GUI once unlocked, and what
-  // {tenko_title} resolves to for the NeoEssentials chat bridge if you use
+  // {active_title} resolves to for the NeoEssentials chat bridge if you use
   // it. "&" color codes are supported, e.g. "&6Kitsune" for gold text.
   // REQUIRED.
   "display": "&6Kitsune",
@@ -43,5 +43,5 @@ To add a real title to YOUR server:
 ----------------------------------------------------------------------------
 
 That's the entire schema — four fields, no nesting, only "display" is required.
-The mod itself ships with ZERO titles built in; every title on your server,
-including Tenko's own, lives in files exactly like this one.
+The mod itself ships with ZERO titles built in; every title on your server
+lives in files exactly like this one.

@@ -1,8 +1,8 @@
-package com.tenko.titlescrolls.client;
+package com.tac5studios.codextitlescrolls.client;
 
-import com.tenko.titlescrolls.network.OpenTitleScreenPayload;
-import com.tenko.titlescrolls.network.SetActiveTitlePayload;
-import com.tenko.titlescrolls.util.ColorCodes;
+import com.tac5studios.codextitlescrolls.network.OpenTitleScreenPayload;
+import com.tac5studios.codextitlescrolls.network.SetActiveTitlePayload;
+import com.tac5studios.codextitlescrolls.util.ColorCodes;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -18,39 +19,21 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * The real GUI behind /title — rendered as a fixed grid of inventory-style
- * slots (like a chest screen), not a scrolling text list (user's call,
- * 27 Sep 2026 — "don't want a scrolling window for the gui"). Every title
- * fits on one screen at once, no paging/scrolling needed for up to 54
- * entries (9 columns wide).
+ * The /title menu: a chest-style grid of slots, 9 columns and 54 titles per page.
  *
- * Every owned title shares the same icon (a Name Tag — fits the "title"
- * theme); rarity is conveyed purely by the slot's border color instead of
- * different item icons (user's call, 27 Sep 2026): green = common,
- * blue = rare, purple = epic, gold = legendary, red = unique/S-class.
- * The active title additionally gets a white outer ring around its rarity
- * border so it stays distinguishable even on a gold (legendary) slot.
+ * <p>Every owned title uses the same icon (a Name Tag). Rarity shows as the slot border:
+ * green = common, blue = rare, purple = epic, gold = legendary, red = unique. The active
+ * title also gets a white outer ring, so it stands out even on a gold slot.
  *
- * The catalog is sorted by rarity tier (common block, then rare, epic,
- * legendary, unique, in that order) client-side in the constructor, so
- * slots always group by rarity rather than whatever order the server's
- * datapack loader happened to produce (user's call, 27 Sep 2026). Sort is
- * stable, so titles within the same tier keep their original relative
- * order from the server.
+ * <p>Titles are sorted by rarity on the client (common first, unique last). The sort is
+ * stable, so titles of the same rarity keep the server's order.
  *
- * Hover info is shown in a FIXED strip below the grid rather than a
- * tooltip box that follows the cursor — GuiGraphics.renderItem() draws
- * through a separate render buffer that doesn't reliably flush in
- * code-call order relative to plain fill() rectangles, so a tooltip near
- * another slot's icon could get drawn underneath it regardless of draw
- * order in code. Anchoring the info text to a fixed spot outside the grid
- * entirely sidesteps that instead of fighting it.
+ * <p>Hover info is drawn in a fixed strip below the grid instead of a tooltip that follows
+ * the cursor: renderItem() draws through a separate buffer, so a tooltip near another
+ * slot's icon could end up underneath it.
  *
- * Deliberately built with only the most stable, version-independent
- * GuiGraphics primitives (fill, drawString, renderItem) instead of
- * blitting real vanilla container textures — blit()'s exact signature has
- * moved around between Minecraft versions more than almost anything else
- * in the GUI code, so this avoids that risk entirely rather than guessing.
+ * <p>Only fill, drawString and renderItem are used (no blitted container textures), since
+ * blit()'s signature changes between Minecraft versions.
  */
 public class TitleScreen extends Screen {
 
@@ -111,7 +94,7 @@ public class TitleScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
 
         int rows = Math.max(1, (int) Math.ceil(Math.min(PAGE_SIZE, catalog.size()) / (double) COLS));
@@ -153,7 +136,7 @@ public class TitleScreen extends Screen {
                 graphics.renderItem(ICON, x + 1, y + 1);
                 drawBorder(graphics, x, y, rarityColor(entry.rarity()));
                 if (active) {
-                    drawOuterRing(graphics, x, y, 0xFFFFFFFF);
+                    drawOuterRing(graphics, x, y);
                 }
             } else {
                 graphics.drawCenteredString(this.font, "?", x + SLOT_SIZE / 2, y + 5, 0xAAAAAA);
@@ -186,7 +169,9 @@ public class TitleScreen extends Screen {
         graphics.fill(x + SLOT_SIZE - 1, y, x + SLOT_SIZE, y + SLOT_SIZE, color);
     }
 
-    private void drawOuterRing(GuiGraphics graphics, int x, int y, int color) {
+    /** White ring around the active title's slot. */
+    private void drawOuterRing(GuiGraphics graphics, int x, int y) {
+        int color = 0xFFFFFFFF;
         int x0 = x - 1;
         int y0 = y - 1;
         int x1 = x + SLOT_SIZE + 1;

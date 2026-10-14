@@ -1,4 +1,10 @@
-# Title Scrolls changelog
+# Codex: Title Scrolls changelog
+
+## 1.0.2
+
+- Title Scrolls is now part of the Codex family: renamed to Codex: Title Scrolls, and the jar is now `codex_title_scrolls-<version>.jar`.
+- Java package moved to `com.tac5studios.codextitlescrolls`. The mod id is still `titlescrolls`, so existing scrolls, titles and title datapacks keep working.
+- Chat mods that read titles by class name need to look in the new package (Elements: Nexus does from 1.0.2 on).
 
 ## 1.0.1
 

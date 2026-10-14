@@ -1,4 +1,4 @@
-package com.tenko.titlescrolls.data;
+package com.tac5studios.codextitlescrolls.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -9,7 +9,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
  * in — every field here is content, not code. See docs/example_title.json.txt
  * for a fully-commented example of the file format.
  *
- * Fields:
+ * <p>Fields:
  *   display     - the exact text shown in chat/GUI, color codes allowed with
  *                 "&" (e.g. "&6Kitsune"). Required.
  *   rarity      - freeform label ("common"/"uncommon"/"rare"/whatever a

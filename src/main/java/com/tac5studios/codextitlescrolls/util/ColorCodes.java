@@ -1,4 +1,4 @@
-package com.tenko.titlescrolls.util;
+package com.tac5studios.codextitlescrolls.util;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

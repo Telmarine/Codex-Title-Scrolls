@@ -1,13 +1,13 @@
-package com.tenko.titlescrolls;
+package com.tac5studios.codextitlescrolls;
 
-import com.tenko.titlescrolls.command.TitleCommand;
-import com.tenko.titlescrolls.command.GiveCommand;
-import com.tenko.titlescrolls.data.TitleReloadListener;
-import com.tenko.titlescrolls.integration.NeoEssentialsIntegration;
-import com.tenko.titlescrolls.network.ModNetworking;
-import com.tenko.titlescrolls.registry.ModAttachments;
-import com.tenko.titlescrolls.registry.ModDataComponents;
-import com.tenko.titlescrolls.registry.ModItems;
+import com.tac5studios.codextitlescrolls.command.TitleCommand;
+import com.tac5studios.codextitlescrolls.command.GiveCommand;
+import com.tac5studios.codextitlescrolls.data.TitleReloadListener;
+import com.tac5studios.codextitlescrolls.integration.NeoEssentialsIntegration;
+import com.tac5studios.codextitlescrolls.network.ModNetworking;
+import com.tac5studios.codextitlescrolls.registry.ModAttachments;
+import com.tac5studios.codextitlescrolls.registry.ModDataComponents;
+import com.tac5studios.codextitlescrolls.registry.ModItems;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;

@@ -1,12 +1,12 @@
-package com.tenko.titlescrolls.command;
+package com.tac5studios.codextitlescrolls.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
-import com.tenko.titlescrolls.TitleScrolls;
-import com.tenko.titlescrolls.data.PlayerTitleData;
-import com.tenko.titlescrolls.network.OpenTitleScreenPayload;
-import com.tenko.titlescrolls.registry.ModAttachments;
+import com.tac5studios.codextitlescrolls.TitleScrolls;
+import com.tac5studios.codextitlescrolls.data.PlayerTitleData;
+import com.tac5studios.codextitlescrolls.network.OpenTitleScreenPayload;
+import com.tac5studios.codextitlescrolls.registry.ModAttachments;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * /title opens the title menu for every player.
  *
- * Vanilla already has a /title command (on-screen text, OP level 2). Brigadier would merge
+ * <p>Vanilla already has a /title command (on-screen text, OP level 2). Brigadier would merge
  * ours into it and keep the vanilla permission, so players could never open the menu.
  * Instead the root is rebuilt: /title alone is open to everyone, and the vanilla
  * sub-commands (/title <targets> ...) keep their OP level 2 requirement.
@@ -50,18 +50,18 @@ public class TitleCommand {
                 copy.requires(s -> s.hasPermission(2) && child.getRequirement().test(s));
                 root.then(copy);
             }
-            removeRoot(dispatcher, "title");
+            removeTitleRoot(dispatcher);
         }
         dispatcher.register(root);
     }
 
-    /** Remove a root command so it can be registered again with a different requirement. */
-    private static void removeRoot(CommandDispatcher<CommandSourceStack> dispatcher, String name) {
+    /** Remove the vanilla /title root so it can be registered again with a different requirement. */
+    private static void removeTitleRoot(CommandDispatcher<CommandSourceStack> dispatcher) {
         for (String field : new String[]{"children", "literals", "arguments"}) {
             try {
                 Field f = CommandNode.class.getDeclaredField(field);
                 f.setAccessible(true);
-                ((Map<?, ?>) f.get(dispatcher.getRoot())).remove(name);
+                ((Map<?, ?>) f.get(dispatcher.getRoot())).remove("title");
             } catch (ReflectiveOperationException ignored) {
             }
         }

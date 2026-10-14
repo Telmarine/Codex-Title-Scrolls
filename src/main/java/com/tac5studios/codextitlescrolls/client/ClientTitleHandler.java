@@ -1,6 +1,6 @@
-package com.tenko.titlescrolls.client;
+package com.tac5studios.codextitlescrolls.client;
 
-import com.tenko.titlescrolls.network.OpenTitleScreenPayload;
+import com.tac5studios.codextitlescrolls.network.OpenTitleScreenPayload;
 import net.minecraft.client.Minecraft;
 
 public class ClientTitleHandler {

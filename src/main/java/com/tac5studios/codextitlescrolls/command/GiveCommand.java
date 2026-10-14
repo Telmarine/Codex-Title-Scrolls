@@ -1,15 +1,15 @@
-package com.tenko.titlescrolls.command;
+package com.tac5studios.codextitlescrolls.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.tenko.titlescrolls.TitleScrolls;
-import com.tenko.titlescrolls.data.TitleDefinition;
-import com.tenko.titlescrolls.registry.ModDataComponents;
-import com.tenko.titlescrolls.registry.ModItems;
-import com.tenko.titlescrolls.util.ColorCodes;
+import com.tac5studios.codextitlescrolls.TitleScrolls;
+import com.tac5studios.codextitlescrolls.data.TitleDefinition;
+import com.tac5studios.codextitlescrolls.registry.ModDataComponents;
+import com.tac5studios.codextitlescrolls.registry.ModItems;
+import com.tac5studios.codextitlescrolls.util.ColorCodes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -59,7 +59,7 @@ public final class GiveCommand {
             for (int i = 0; i < amount; i++) {
                 ItemStack scroll = new ItemStack(ModItems.TITLE_SCROLL.get());
                 scroll.set(ModDataComponents.GRANTS_TITLE.get(), id);
-                scroll.set(net.minecraft.core.component.DataComponents.LORE, com.tenko.titlescrolls.item.TitleScrollItem.lore(id));
+                scroll.set(net.minecraft.core.component.DataComponents.LORE, com.tac5studios.codextitlescrolls.item.TitleScrollItem.lore(id));
                 if (!p.getInventory().add(scroll)) p.drop(scroll, false);
             }
             p.containerMenu.broadcastChanges(); // send the new items to the player's screen (same as vanilla /give)

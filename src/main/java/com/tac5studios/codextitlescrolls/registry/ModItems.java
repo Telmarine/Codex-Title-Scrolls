@@ -1,7 +1,7 @@
-package com.tenko.titlescrolls.registry;
+package com.tac5studios.codextitlescrolls.registry;
 
-import com.tenko.titlescrolls.TitleScrolls;
-import com.tenko.titlescrolls.item.TitleScrollItem;
+import com.tac5studios.codextitlescrolls.TitleScrolls;
+import com.tac5studios.codextitlescrolls.item.TitleScrollItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;

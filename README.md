@@ -1,6 +1,6 @@
-# Title Scrolls
+# Codex: Title Scrolls
 
-![NeoForge 1.21.1](https://img.shields.io/badge/NeoForge-1.21.1-orange) ![Environment: Client & Server](https://img.shields.io/badge/Environment-Client%20%26%20Server-lightgrey) ![License: Custom](https://img.shields.io/badge/License-Custom-blue)
+![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-62B47A?style=for-the-badge) ![NeoForge](https://img.shields.io/badge/NeoForge-21.1.x-E68A2E?style=for-the-badge) ![Side](https://img.shields.io/badge/Side-Client%20%26%20Server-5865F2?style=for-the-badge) ![Type](https://img.shields.io/badge/Type-Quality%20of%20Life-8A2BE2?style=for-the-badge) [![Source](https://img.shields.io/badge/Source-GitHub-181717?style=for-the-badge&logo=github)](https://github.com/Telmarine/Codex-Title-Scrolls)
 
 Players find a Title Scroll in loot, right-click it to unlock a title, then open `/title` to see their collection and pick the title they want to wear. Titles they haven't found yet show as "?" with no name, rarity or flavor text.
 

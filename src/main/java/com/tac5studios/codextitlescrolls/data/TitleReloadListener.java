@@ -1,14 +1,16 @@
-package com.tenko.titlescrolls.data;
+package com.tac5studios.codextitlescrolls.data;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
-import com.tenko.titlescrolls.TitleScrolls;
+import com.tac5studios.codextitlescrolls.TitleScrolls;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 
+import javax.annotation.Nonnull;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -19,8 +21,8 @@ import java.util.Optional;
  * in-memory catalog. Runs on every datapack /reload, same as any vanilla
  * loot table or recipe — no custom reload command needed.
  *
- * A server owner adds a new title by dropping one more JSON file in this
- * folder. Nothing here is Tenko-specific or hardcoded.
+ * <p>A server owner adds a new title by dropping one more JSON file in this
+ * folder. Nothing here is server-specific or hardcoded.
  */
 public class TitleReloadListener extends SimpleJsonResourceReloadListener {
 
@@ -31,7 +33,7 @@ public class TitleReloadListener extends SimpleJsonResourceReloadListener {
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, JsonElement> loaded, ResourceManager resourceManager, ProfilerFiller profiler) {
+    protected void apply(@Nonnull Map<ResourceLocation, JsonElement> loaded, @Nonnull ResourceManager resourceManager, @Nonnull ProfilerFiller profiler) {
         Map<String, TitleDefinition> map = new LinkedHashMap<>();
         loaded.forEach((id, json) -> TitleDefinition.CODEC.parse(JsonOps.INSTANCE, json)
                 .resultOrPartial(error -> TitleScrolls.LOGGER.error("[TitleScrolls] Failed to parse title {}: {}", id, error))
@@ -47,7 +49,7 @@ public class TitleReloadListener extends SimpleJsonResourceReloadListener {
                     }
                     map.put(key, def);
                 }));
-        this.titles = java.util.Collections.unmodifiableMap(map); // keeps load order
+        this.titles = Collections.unmodifiableMap(map); // keeps load order
         TitleScrolls.LOGGER.info("[TitleScrolls] Loaded {} title definition(s).", map.size());
     }
 

@@ -1,12 +1,12 @@
-package com.tenko.titlescrolls.item;
+package com.tac5studios.codextitlescrolls.item;
 
-import com.tenko.titlescrolls.TitleScrolls;
-import com.tenko.titlescrolls.data.PlayerTitleData;
-import com.tenko.titlescrolls.data.TitleDefinition;
-import com.tenko.titlescrolls.registry.ModAttachments;
-import com.tenko.titlescrolls.registry.ModDataComponents;
+import com.tac5studios.codextitlescrolls.TitleScrolls;
+import com.tac5studios.codextitlescrolls.data.PlayerTitleData;
+import com.tac5studios.codextitlescrolls.data.TitleDefinition;
+import com.tac5studios.codextitlescrolls.registry.ModAttachments;
+import com.tac5studios.codextitlescrolls.registry.ModDataComponents;
 import net.minecraft.ChatFormatting;
-import com.tenko.titlescrolls.util.ColorCodes;
+import com.tac5studios.codextitlescrolls.util.ColorCodes;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -19,6 +19,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -29,11 +30,11 @@ import java.util.Optional;
  * stack unlocks is decided entirely by the GRANTS_TITLE data component set on
  * that stack (see a loot table entry, or /give ... [titlescrolls:grants_title="kitsune"]).
  *
- * Behavior (settled with the user 27 Sep 2026):
- *  - New unlock -> added to the player's collection, scroll is consumed,
- *    feedback goes to CHAT (not actionbar).
- *  - Duplicate of a title already owned -> scroll is NOT consumed, so it can
- *    be traded/handed to someone who doesn't have it yet.
+ * <ul>
+ *   <li>New unlock: added to the player's collection, the scroll is used up, and the
+ *   message goes to chat.</li>
+ *   <li>A title the player already owns: the scroll is not used up, so it can be traded.</li>
+ * </ul>
  */
 public class TitleScrollItem extends Item {
 
@@ -47,7 +48,7 @@ public class TitleScrollItem extends Item {
      * Checked once a second while the scroll is in an inventory.
      */
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(@Nonnull ItemStack stack, @Nonnull Level level, @Nonnull Entity entity, int slot, boolean selected) {
         if (level.isClientSide || level.getGameTime() % 20 != 0) return;
         ItemLore want = lore(stack.getOrDefault(ModDataComponents.GRANTS_TITLE.get(), ""));
         if (!want.equals(stack.get(DataComponents.LORE))) stack.set(DataComponents.LORE, want);
@@ -94,7 +95,8 @@ public class TitleScrollItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    @Nonnull
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
         if (level.isClientSide) {
@@ -126,7 +128,7 @@ public class TitleScrollItem extends Item {
                     Component.literal("You already have this title — this scroll can be given to someone else.")
                             .withStyle(ChatFormatting.GRAY),
                     false);
-            // Not consumed — duplicate scrolls stay in inventory (user's call, 27 Sep 2026).
+            // Not used up: duplicate scrolls stay in the inventory so they can be traded.
             return InteractionResultHolder.pass(stack);
         }
 

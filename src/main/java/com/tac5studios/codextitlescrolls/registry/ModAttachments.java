@@ -1,7 +1,7 @@
-package com.tenko.titlescrolls.registry;
+package com.tac5studios.codextitlescrolls.registry;
 
-import com.tenko.titlescrolls.TitleScrolls;
-import com.tenko.titlescrolls.data.PlayerTitleData;
+import com.tac5studios.codextitlescrolls.TitleScrolls;
+import com.tac5studios.codextitlescrolls.data.PlayerTitleData;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;

@@ -1,8 +1,8 @@
-package com.tenko.titlescrolls.network;
+package com.tac5studios.codextitlescrolls.network;
 
-import com.tenko.titlescrolls.TitleScrolls;
-import com.tenko.titlescrolls.data.PlayerTitleData;
-import com.tenko.titlescrolls.registry.ModAttachments;
+import com.tac5studios.codextitlescrolls.TitleScrolls;
+import com.tac5studios.codextitlescrolls.data.PlayerTitleData;
+import com.tac5studios.codextitlescrolls.registry.ModAttachments;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -16,7 +16,7 @@ public class ModNetworking {
                 OpenTitleScreenPayload.TYPE,
                 OpenTitleScreenPayload.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(() ->
-                        com.tenko.titlescrolls.client.ClientTitleHandler.openScreen(payload))
+                        com.tac5studios.codextitlescrolls.client.ClientTitleHandler.openScreen(payload))
         );
 
         registrar.playToServer(

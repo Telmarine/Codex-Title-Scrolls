@@ -3,10 +3,10 @@ plugins {
 }
 
 version = mod_version
-group = 'com.tenko.titlescrolls'
+group = 'com.tac5studios.codextitlescrolls'
 
 base {
-    archivesName = mod_id
+    archivesName = "codex_title_scrolls"
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -19,13 +19,13 @@ dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
     // Optional soft dependency, used only by integration/NeoEssentialsIntegration.java
-    // to register the {tenko_title} chat placeholder. This mod runs completely
+    // to register the {active_title} chat placeholder. This mod runs completely
     // standalone without it.
     //
     // To build WITH the NeoEssentials bridge: drop the exact NeoEssentials jar you
     // have installed (e.g. neoessentials-1.0.5-1.21.x+build.54-all.jar) into libs/.
     // To build WITHOUT it (e.g. you don't run NeoEssentials on your server): just
-    // delete src/main/java/com/tenko/titlescrolls/integration/NeoEssentialsIntegration.java
+    // delete src/main/java/com/tac5studios/codextitlescrolls/integration/NeoEssentialsIntegration.java
     // and the one guarded call to it in TitleScrolls.java's commonSetup() — nothing
     // else in this mod references NeoEssentials at all.
     compileOnly fileTree(dir: 'libs', include: '*.jar')

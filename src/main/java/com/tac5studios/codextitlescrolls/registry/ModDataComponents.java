@@ -1,11 +1,9 @@
-package com.tenko.titlescrolls.registry;
+package com.tac5studios.codextitlescrolls.registry;
 
 import com.mojang.serialization.Codec;
-import com.tenko.titlescrolls.TitleScrolls;
+import com.tac5studios.codextitlescrolls.TitleScrolls;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
-import net.neoforged.neoforge.common.util.NeoForgeExtraCodecs;
-import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;

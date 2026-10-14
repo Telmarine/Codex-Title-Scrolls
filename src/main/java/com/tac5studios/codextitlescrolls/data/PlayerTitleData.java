@@ -1,4 +1,4 @@
-package com.tenko.titlescrolls.data;
+package com.tac5studios.codextitlescrolls.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

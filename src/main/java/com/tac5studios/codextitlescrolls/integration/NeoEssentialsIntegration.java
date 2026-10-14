@@ -1,8 +1,8 @@
-package com.tenko.titlescrolls.integration;
+package com.tac5studios.codextitlescrolls.integration;
 
-import com.tenko.titlescrolls.TitleScrolls;
-import com.tenko.titlescrolls.data.TitleDefinition;
-import com.tenko.titlescrolls.registry.ModAttachments;
+import com.tac5studios.codextitlescrolls.TitleScrolls;
+import com.tac5studios.codextitlescrolls.data.TitleDefinition;
+import com.tac5studios.codextitlescrolls.registry.ModAttachments;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.lang.reflect.Method;
@@ -13,7 +13,7 @@ import java.lang.reflect.Proxy;
  * installed (see TitleScrolls#commonSetup). Registers {active_title}: the player's active
  * title, or "" if none.
  *
- * Done through reflection so Title Scrolls builds without the NeoEssentials jar.
+ * <p>Done through reflection so Title Scrolls builds without the NeoEssentials jar.
  */
 public class NeoEssentialsIntegration {
 
