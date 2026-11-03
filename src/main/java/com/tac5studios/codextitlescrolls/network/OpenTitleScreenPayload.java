@@ -13,9 +13,10 @@ import java.util.List;
 
 /**
  * Server -> client. Sent in response to /title: every title id (locked ones without their
- * text), the player's unlocked titles and their active title.
+ * text), the player's unlocked titles, their active title and the server's rarities
+ * ("name=#RRGGBB", in menu order).
  */
-public record OpenTitleScreenPayload(List<TitleEntry> titles, List<String> unlocked, String activeTitle)
+public record OpenTitleScreenPayload(List<TitleEntry> titles, List<String> unlocked, String activeTitle, List<String> rarities)
         implements CustomPacketPayload {
 
     public static final Type<OpenTitleScreenPayload> TYPE =
@@ -25,6 +26,7 @@ public record OpenTitleScreenPayload(List<TitleEntry> titles, List<String> unloc
             TitleEntry.STREAM_CODEC.apply(ByteBufCodecs.list()), OpenTitleScreenPayload::titles,
             ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()), OpenTitleScreenPayload::unlocked,
             ByteBufCodecs.STRING_UTF8, OpenTitleScreenPayload::activeTitle,
+            ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()), OpenTitleScreenPayload::rarities,
             OpenTitleScreenPayload::new
     );
 

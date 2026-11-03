@@ -1,11 +1,15 @@
 package com.tac5studios.codextitlescrolls.item;
 
 import com.tac5studios.codextitlescrolls.TitleScrolls;
+import com.tac5studios.codextitlescrolls.config.Feature;
+import com.tac5studios.codextitlescrolls.config.Features;
 import com.tac5studios.codextitlescrolls.data.PlayerTitleData;
 import com.tac5studios.codextitlescrolls.data.TitleDefinition;
 import com.tac5studios.codextitlescrolls.registry.ModAttachments;
 import com.tac5studios.codextitlescrolls.registry.ModDataComponents;
+import com.tac5studios.codextitlescrolls.config.Rarities;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TextColor;
 import com.tac5studios.codextitlescrolls.util.ColorCodes;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -49,7 +53,7 @@ public class TitleScrollItem extends Item {
      */
     @Override
     public void inventoryTick(@Nonnull ItemStack stack, @Nonnull Level level, @Nonnull Entity entity, int slot, boolean selected) {
-        if (level.isClientSide || level.getGameTime() % 20 != 0) return;
+        if (level.isClientSide || level.getGameTime() % 20 != 0 || !Features.on(Feature.SCROLL_TOOLTIP)) return;
         ItemLore want = lore(stack.getOrDefault(ModDataComponents.GRANTS_TITLE.get(), ""));
         if (!want.equals(stack.get(DataComponents.LORE))) stack.set(DataComponents.LORE, want);
     }
@@ -72,7 +76,7 @@ public class TitleScrollItem extends Item {
         if (!rarity.isBlank()) {
             lines.add(plain(Component.literal("Rarity: ").withStyle(ChatFormatting.GRAY)
                     .append(Component.literal(rarity.substring(0, 1).toUpperCase(Locale.ROOT) + rarity.substring(1))
-                            .withStyle(rarityColor(rarity)))));
+                            .withStyle(s -> s.withColor(TextColor.fromRgb(Rarities.color(Rarities.current(), rarity)))))));
         }
         return new ItemLore(lines);
     }
@@ -82,18 +86,6 @@ public class TitleScrollItem extends Item {
         return Component.empty().withStyle(s -> s.withItalic(false).withColor(ChatFormatting.WHITE)).append(c);
     }
 
-    /** Same colors as the /title menu borders. */
-    private static ChatFormatting rarityColor(String rarity) {
-        return switch (rarity.toLowerCase(Locale.ROOT)) {
-            case "common" -> ChatFormatting.GREEN;
-            case "rare" -> ChatFormatting.BLUE;
-            case "epic" -> ChatFormatting.DARK_PURPLE;
-            case "legendary" -> ChatFormatting.GOLD;
-            case "unique" -> ChatFormatting.RED;
-            default -> ChatFormatting.GRAY;
-        };
-    }
-
     @Override
     @Nonnull
     public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
@@ -101,6 +93,12 @@ public class TitleScrollItem extends Item {
 
         if (level.isClientSide) {
             return InteractionResultHolder.success(stack);
+        }
+
+        if (!Features.on(Feature.TITLE_SCROLLS)) {
+            player.displayClientMessage(Component.literal("Title Scrolls are turned off on this server.")
+                    .withStyle(ChatFormatting.RED), true);
+            return InteractionResultHolder.fail(stack);
         }
 
         String titleId = stack.getOrDefault(ModDataComponents.GRANTS_TITLE.get(), "");

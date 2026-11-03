@@ -1,5 +1,6 @@
 package com.tac5studios.codextitlescrolls.client;
 
+import com.tac5studios.codextitlescrolls.config.Rarities;
 import com.tac5studios.codextitlescrolls.network.OpenTitleScreenPayload;
 import com.tac5studios.codextitlescrolls.network.SetActiveTitlePayload;
 import com.tac5studios.codextitlescrolls.util.ColorCodes;
@@ -16,17 +17,19 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * The /title menu: a chest-style grid of slots, 9 columns and 54 titles per page.
  *
- * <p>Every owned title uses the same icon (a Name Tag). Rarity shows as the slot border:
- * green = common, blue = rare, purple = epic, gold = legendary, red = unique. The active
- * title also gets a white outer ring, so it stands out even on a gold slot.
+ * <p>Every owned title uses the same icon (a Name Tag). Rarity shows as the slot border, in the
+ * color the server set for it ([rarities] in settings.toml). The active title also gets a white
+ * outer ring, so it stands out even on a gold slot.
  *
- * <p>Titles are sorted by rarity on the client (common first, unique last). The sort is
- * stable, so titles of the same rarity keep the server's order.
+ * <p>Titles are sorted by rarity in the server's list order (unlisted rarities and locked titles
+ * last). The sort is stable, so titles of the same rarity keep the server's order.
  *
  * <p>Hover info is drawn in a fixed strip below the grid instead of a tooltip that follows
  * the cursor: renderItem() draws through a separate buffer, so a tooltip near another
@@ -45,6 +48,7 @@ public class TitleScreen extends Screen {
 
     private final List<OpenTitleScreenPayload.TitleEntry> catalog;
     private final Set<String> unlocked;
+    private final Map<String, Integer> rarities;
     private String activeTitle;
 
     private int gridLeft;
@@ -54,8 +58,13 @@ public class TitleScreen extends Screen {
 
     public TitleScreen(OpenTitleScreenPayload payload) {
         super(Component.literal("Titles"));
+        this.rarities = Rarities.parse(payload.rarities());
+        List<String> order = new ArrayList<>(rarities.keySet());
         List<OpenTitleScreenPayload.TitleEntry> sorted = new ArrayList<>(payload.titles());
-        sorted.sort(Comparator.comparingInt(e -> rarityRank(e.rarity())));
+        sorted.sort(Comparator.comparingInt(e -> {
+            int at = order.indexOf(e.rarity().toLowerCase(Locale.ROOT));
+            return at < 0 ? order.size() : at;
+        }));
         this.catalog = sorted;
         this.unlocked = new HashSet<>(payload.unlocked());
         this.activeTitle = payload.activeTitle();
@@ -134,7 +143,7 @@ public class TitleScreen extends Screen {
 
             if (owned) {
                 graphics.renderItem(ICON, x + 1, y + 1);
-                drawBorder(graphics, x, y, rarityColor(entry.rarity()));
+                drawBorder(graphics, x, y, 0xFF000000 | Rarities.color(rarities, entry.rarity()));
                 if (active) {
                     drawOuterRing(graphics, x, y);
                 }
@@ -200,26 +209,5 @@ public class TitleScreen extends Screen {
         this.activeTitle = id;
         PacketDistributor.sendToServer(new SetActiveTitlePayload(id));
         this.onClose();
-    }
-
-    private static int rarityRank(String rarity) {
-        return switch (rarity) {
-            case "common" -> 0;
-            case "rare" -> 1;
-            case "epic" -> 2;
-            case "legendary" -> 3;
-            case "unique" -> 4;
-            default -> 5;
-        };
-    }
-
-    private static int rarityColor(String rarity) {
-        return switch (rarity) {
-            case "rare" -> 0xFF5555FF;
-            case "epic" -> 0xFFAA00AA;
-            case "legendary" -> 0xFFFFAA00;
-            case "unique" -> 0xFFFF5555;
-            default -> 0xFF55FF55;
-        };
     }
 }

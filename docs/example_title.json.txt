@@ -1,20 +1,19 @@
 This is a REFERENCE ONLY file — note the ".json.txt" extension, not ".json".
-The mod's reload listener only loads real ".json" files, so this one is never
+The mod only loads real ".json" files, so this one is never
 picked up as an actual title. That's on purpose, same trick the old Aurilux
 Titles mod used for its own example file.
 
 To add a real title to YOUR server:
   1. Copy everything between the ---- lines below into a new file.
-  2. Save it as data/<your_namespace>/titles/<your_title_id>.json
-     (a datapack path — the same place loot tables/recipes/etc. live).
+  2. Save it as config/titlescrolls/titles/<your_title_id>.json
+     (one file per title).
      <your_title_id> becomes the id you reference from a Title Scroll's
      grants_title data component (see the README's "Giving out a title"
      section for the /give example).
   3. Fill in the fields for your own title. Delete every line in this
      file that starts with "//" first — real JSON has no comments, this
      reference copy is just annotated for you.
-  4. Run /reload in-game (vanilla's own datapack reload command — nothing
-     custom needed) and the new title shows up immediately.
+  4. Run /titlescroll reload in-game and the new title shows up immediately.
 
 ----------------------------------------------------------------------------
 {
@@ -24,10 +23,11 @@ To add a real title to YOUR server:
   // REQUIRED.
   "display": "&6Kitsune",
 
-  // Freeform label — "common"/"uncommon"/"rare"/"legendary"/whatever your
-  // server wants to call it. Purely cosmetic right now (shown once a player
-  // has actually unlocked the title — never leaked for an undiscovered
-  // one). OPTIONAL, defaults to "common" if you leave it out entirely.
+  // Any rarity listed in [rarities] in config/titlescrolls/settings.toml.
+  // Built in: common, rare, epic, legendary, unique. Add your own there with
+  // its own border color, e.g. "mythic=#00FFFF". Sets the slot border and the
+  // menu order; shown once a player has unlocked the title, never before.
+  // OPTIONAL, defaults to "common" if you leave it out entirely.
   "rarity": "rare",
 
   // A short line shown under the title name once it's unlocked. Totally

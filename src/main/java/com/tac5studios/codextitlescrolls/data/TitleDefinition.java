@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 /**
- * One title, as defined by a server owner's own datapack JSON file at
- * data/<namespace>/titles/<id>.json. The mod ships with ZERO of these baked
+ * One title, as defined by a server owner's own JSON file at
+ * config/titlescrolls/titles/<id>.json. The mod ships with ZERO of these baked
  * in — every field here is content, not code. See docs/example_title.json.txt
  * for a fully-commented example of the file format.
  *

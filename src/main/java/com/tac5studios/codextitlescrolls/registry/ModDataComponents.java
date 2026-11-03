@@ -12,14 +12,14 @@ import net.neoforged.neoforge.registries.DeferredRegister;
  * The single data component that turns a plain Title Scroll item stack into a
  * scroll for one SPECIFIC title. Storing the title's id here (rather than
  * registering one Item per title) is what lets new titles be added purely
- * through datapack JSON — see data/TitleReloadListener.java.
+ * through files in config/titlescrolls/titles/ — see data/TitleStore.java.
  */
 public class ModDataComponents {
     public static final DeferredRegister<DataComponentType<?>> REGISTER =
             DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, TitleScrolls.MOD_ID);
 
     // Value is the title's plain string id (matches the JSON file name under
-    // data/<namespace>/titles/, e.g. "kitsune"), never a display name.
+    // config/titlescrolls/titles/, e.g. "kitsune"), never a display name.
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> GRANTS_TITLE =
             REGISTER.register("grants_title", () -> DataComponentType.<String>builder()
                     .persistent(Codec.STRING)
